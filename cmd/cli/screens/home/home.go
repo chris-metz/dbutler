@@ -16,11 +16,6 @@ func (hs HomeScreen) Init() tea.Cmd {
 
 func (hs HomeScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		switch msg.String() {
-		case "q":
-			return hs, tea.Quit
-		}
 	case tea.WindowSizeMsg:
 		hs.width = msg.Width
 		hs.height = msg.Height
@@ -32,8 +27,8 @@ func (hs HomeScreen) View() string {
 	return hs.getBox("hey!")
 }
 
-func NewHomeScreen() *HomeScreen {
-	return &HomeScreen{}
+func NewHomeScreen() HomeScreen {
+	return HomeScreen{}
 }
 
 func (hs HomeScreen) getBox(content string) string {
