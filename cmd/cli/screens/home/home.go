@@ -1,13 +1,16 @@
 package home
 
 import (
+	"strconv"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
 type HomeScreen struct {
-	width  int
-	height int
+	width              int
+	height             int
+	SelectedConnection int
 }
 
 func (hs HomeScreen) Init() tea.Cmd {
@@ -24,11 +27,13 @@ func (hs HomeScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (hs HomeScreen) View() string {
-	return hs.getBox("hey!")
+	return hs.getBox(strconv.Itoa(hs.SelectedConnection))
 }
 
 func NewHomeScreen() HomeScreen {
-	return HomeScreen{}
+	return HomeScreen{
+		SelectedConnection: -1,
+	}
 }
 
 func (hs HomeScreen) getBox(content string) string {

@@ -1,7 +1,7 @@
 package selectconnection
 
 import (
-	"fmt"
+	"strconv"
 
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
@@ -9,7 +9,12 @@ import (
 )
 
 type SelectConnectionScreen struct {
-	table table.Model
+	SelectedConnection int
+	table              table.Model
+}
+
+type ConnectionSelectedMsg struct {
+	ConnectionIndex int
 }
 
 func (scs SelectConnectionScreen) Init() tea.Cmd {
@@ -28,19 +33,24 @@ func (scs SelectConnectionScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "up":
-			scs.table.MoveUp(1) // Move up by one row
+			// scs.table.MoveUp(1) // Move up by one row
 		case "down":
-			scs.table.MoveDown(1) // Move down by one row
+			// scs.table.MoveDown(1) // Move down by one row
 		case "enter":
-			// selectedRow := m.table.SelectedRow()
-			// fmt.Printf("Selected: %s\n", selectedRow)
+			selectedRow := scs.table.SelectedRow()
+			connectionIndex, _ := strconv.Atoi(selectedRow[0])
+			return scs, func() tea.Msg {
+				return ConnectionSelectedMsg{
+					ConnectionIndex: connectionIndex,
+				}
+			}
+			// scs.SelectedConnection, _ = strconv.Atoi(selectedRow[0])
 		}
 		// Handle other messages here
 	}
 
-	tea.Println("update")
+	// tea.Println("update")
 	scs.table, cmd = scs.table.Update(msg)
-	fmt.Println(scs.table.Cursor())
 	return scs, cmd
 }
 
@@ -187,6 +197,7 @@ func NewSelectConnectionScreen() SelectConnectionScreen {
 	t.SetStyles(s)
 
 	return SelectConnectionScreen{
-		table: t,
+		table:              t,
+		SelectedConnection: -1,
 	}
 }

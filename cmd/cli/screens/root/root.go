@@ -7,9 +7,10 @@ import (
 )
 
 type RootScreen struct {
-	state            string
-	selectConnScreen selectconnection.SelectConnectionScreen
-	homeScreen       home.HomeScreen
+	state              string
+	selectedConnection int
+	selectConnScreen   selectconnection.SelectConnectionScreen
+	homeScreen         home.HomeScreen
 }
 
 func (rs RootScreen) Init() tea.Cmd {
@@ -30,6 +31,10 @@ func (rs RootScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			return rs, nil
 		}
+	case selectconnection.ConnectionSelectedMsg:
+		rs.selectedConnection = msg.ConnectionIndex
+		rs.homeScreen.SelectedConnection = rs.selectedConnection
+		rs.state = "home"
 		return rs, nil
 	}
 
@@ -43,7 +48,6 @@ func (rs RootScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (rs RootScreen) View() string {
-	tea.Println("asdf")
 	if rs.state == "home" {
 		return rs.homeScreen.View()
 	} else {
@@ -53,8 +57,9 @@ func (rs RootScreen) View() string {
 
 func NewRootScreen() RootScreen {
 	return RootScreen{
-		state:            "root",
-		homeScreen:       home.NewHomeScreen(),
-		selectConnScreen: selectconnection.NewSelectConnectionScreen(),
+		state:              "root",
+		homeScreen:         home.NewHomeScreen(),
+		selectConnScreen:   selectconnection.NewSelectConnectionScreen(),
+		selectedConnection: -1,
 	}
 }
