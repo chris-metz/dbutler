@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 type DbHandler struct {
@@ -58,7 +58,7 @@ func (dh *DbHandler) createStatement(sql string) *sql.Stmt {
 
 func getOrCreateDb() *sql.DB {
 	fileName := "/home/chris/dbutler.db"
-	db, err := sql.Open("sqlite3", fileName)
+	db, err := sql.Open("sqlite", fileName)
 	if err != nil {
 		panic(err)
 	}
